@@ -1,15 +1,15 @@
-import Product from '../models/product.model.js'
+import User from '../models/user.model.js'
 
 export const findAll = async (req, res) => {
     try {
-        const product = await Product.find({})
+        const user = await User.find({})
         res.json({
             status: 200,
-            message: product
+            message: user
         })
     } catch (error) {
         res.json({
-            status: 500,
+            status: 200,
             message: error
         })
     }
@@ -17,40 +17,41 @@ export const findAll = async (req, res) => {
 
 export const findOne = async (req, res) => {
     try {
-        const product = await Product.findById(req.params.id)
-        if (!product) {
-            return res.status(404).json({
+        const user = await User.findById(req.params.id)
+        if (!user) {
+            res.status(404).json({
                 status: 404,
-                message: "Data not Found!"
+                message: "Data not found"
             })
         }
         res.json({
             status: 200,
-            message: product
+            message: user
         })
     } catch (error) {
         res.json({
-            status: 500,
+            status: 200,
             message: error
         })
     }
 }
 
 export const create = async (req, res) => {
-    const product = new Product({
+    const user = new User({
+        username: req.body.username,
+        password: req.body.password,
+        email: req.body.email,
         name: req.body.name,
-        detail: req.body.detail,
-        price: req.body.price
     })
     try {
-        const saveProduct = await product.save()
+        const saveUser = await user.save()
         res.json({
             status: 200,
-            message: saveProduct
+            message: saveUser
         })
     } catch (error) {
         res.json({
-            status: 500,
+            status: 200,
             message: error
         })
     }
@@ -58,15 +59,15 @@ export const create = async (req, res) => {
 
 export const updateOne = async (req, res) => {
     try {
-        const product = await Product.findById(req.params.id)
-        if (!product) {
-            return res.status(404).json({
+        const user = await User.findOne({ _id: req.params.id })
+        if (!user) {
+            res.status(404).json({
                 status: 404,
-                message: "Data not Found!"
+                message: "Data not found"
             })
         }
-        const saveProduct = await Product.updateOne({ _id: req.params.id }, { $set: req.body }, { new: true })
-        if (saveProduct.modifiedCount == 0 || !saveProduct.acknowledged) {
+        const saveUser = await User.updateOne({ _id: req.params.id }, { $set: req.body }, { new: true })
+        if (saveUser.modifiedCount == 0 || !saveUser.acknowledged) {
             res.status(403).json({
                 status: 403,
                 message: "Invalid Scheme / Nothing has Changeed"
@@ -74,11 +75,11 @@ export const updateOne = async (req, res) => {
         }
         res.json({
             status: 200,
-            message: await Product.findById(req.params.id)
+            message: await User.findOne({ _id: req.params.id })
         })
     } catch (error) {
         res.json({
-            status: 500,
+            status: 200,
             message: error
         })
     }
@@ -86,17 +87,17 @@ export const updateOne = async (req, res) => {
 
 export const deleteOne = async (req, res) => {
     try {
-        const product = await Product.findById(req.params.id)
-        if (!product) {
+        const user = await User.findById(req.params.id)
+        if (!user) {
             return res.status(404).json({
                 status: 404,
                 message: "Data not Found!"
             })
         }
-        const deleteProduct = await Product.remove({ _id: req.params.id })
+        const deleteUser = await User.remove({ _id: req.params.id })
         res.json({
             status: 200,
-            message: deleteProduct
+            message: deleteUser
         })
     } catch (error) {
         res.json({

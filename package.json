@@ -3,18 +3,15 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "dev": "nodemon --exec babel-node --require 'dotenv/config' index",
-    "start": "babel-node --require 'dotenv/config' index"
+    "dev": "nodemon --require 'dotenv/config' index",
+    "start": "node --require 'dotenv/config' index"
   },
   "keywords": [],
   "author": "iksans",
   "license": "ISC",
   "dependencies": {
-    "@babel/cli": "^7.16.0",
-    "@babel/core": "^7.16.0",
-    "@babel/node": "^7.16.0",
-    "@babel/preset-env": "^7.16.0",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "mongoose": "^6.0.12",
