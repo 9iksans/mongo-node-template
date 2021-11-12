@@ -67,7 +67,7 @@ export const updateOne = async (req, res) => {
         }
         const saveProduct = await Product.updateOne({ _id: req.params.id }, { $set: req.body }, { new: true })
         if (saveProduct.modifiedCount == 0 || !saveProduct.acknowledged) {
-            res.status(403).json({
+            return res.status(403).json({
                 status: 403,
                 message: "Invalid Scheme / Nothing has Changeed"
             })

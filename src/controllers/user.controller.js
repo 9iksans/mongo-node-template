@@ -19,7 +19,7 @@ export const findOne = async (req, res) => {
     try {
         const user = await User.findById(req.params.id)
         if (!user) {
-            res.status(404).json({
+            return res.status(404).json({
                 status: 404,
                 message: "Data not found"
             })
@@ -44,6 +44,13 @@ export const create = async (req, res) => {
         name: req.body.name,
     })
     try {
+        const isUser = await User.findOne({ $or: [{ username: req.body.username }, { email: req.body.email }] })
+        if (isUser) {
+            return res.status(403).json({
+                status: 403,
+                message: "Username or email already in use"
+            })
+        }
         const saveUser = await user.save()
         res.json({
             status: 200,
@@ -61,14 +68,14 @@ export const updateOne = async (req, res) => {
     try {
         const user = await User.findOne({ _id: req.params.id })
         if (!user) {
-            res.status(404).json({
+            return res.status(404).json({
                 status: 404,
                 message: "Data not found"
             })
         }
         const saveUser = await User.updateOne({ _id: req.params.id }, { $set: req.body }, { new: true })
         if (saveUser.modifiedCount == 0 || !saveUser.acknowledged) {
-            res.status(403).json({
+            return res.status(403).json({
                 status: 403,
                 message: "Invalid Scheme / Nothing has Changeed"
             })

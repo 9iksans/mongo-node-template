@@ -1,6 +1,7 @@
 import express from "express";
 import productRouter from "./src/routes/product.route.js"
 import userRouter from "./src/routes/user.route.js"
+import authRouter from "./src/routes/auth.route.js"
 import DbConnection from "./src/config/db.config.js"
 
 const port = process.env.PORT || 2020
@@ -12,6 +13,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use("/api/products", productRouter)
 app.use('/api/users', userRouter)
+app.use('/api/auth', authRouter)
 
 app.use((req, res, next) => {
     const error = new Error("Not Found")
@@ -28,5 +30,5 @@ app.use((error, req, res, next) => {
 })
 
 app.listen(port, () => {
-    console.log("app si running on port : " + port)
+    console.log("app is running on port : " + port)
 })
